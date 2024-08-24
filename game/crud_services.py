@@ -9,7 +9,10 @@ from .schemas import GameSchema
 from .models import GameModel
 
 
-async def create_game(game: GameSchema, session: AsyncSession = Depends(get_session)):
+async def create_game(
+        game: GameSchema,
+        session: AsyncSession = Depends(get_session)
+) -> None:
     """
     Создание игры
     """
