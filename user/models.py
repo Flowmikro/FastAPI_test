@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import DECIMAL
 
 from app_settings import Base
 
@@ -8,5 +11,5 @@ class UserModel(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
     user_name: Mapped[str] = mapped_column(unique=True)
-    balance: Mapped[int] = mapped_column(default=0)
-    frozen_balance: Mapped[int] = mapped_column(default=0)
+    balance: Mapped[Decimal] = mapped_column(DECIMAL(10, 2), default=0)
+    frozen_balance: Mapped[Decimal] = mapped_column(DECIMAL(10, 2), default=0)
