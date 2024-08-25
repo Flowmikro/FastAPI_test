@@ -46,7 +46,7 @@ async def get_all_users(session: AsyncSession = Depends(get_session)) -> JSONRes
     )
 
 
-@router.post('/update_balance', status_code=status.HTTP_200_OK)
+@router.post('/update_balance')
 async def update_balance(
         balance: UserBalanceSchema,
         session: AsyncSession = Depends(get_session)
