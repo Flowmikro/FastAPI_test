@@ -14,5 +14,4 @@ class GameModel(Base):
     game_over: Mapped[bool] = mapped_column(default=False)
     bet: Mapped["BetModel"] = relationship(
         back_populates="game",
-        uselist=False
     )

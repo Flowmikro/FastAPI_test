@@ -11,7 +11,7 @@ class BetModel(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    game_id: Mapped[int] = mapped_column(ForeignKey("game.id"), unique=True)
+    game_id: Mapped[int] = mapped_column(ForeignKey("game.id"))
     bet_amount: Mapped[Decimal] = mapped_column(DECIMAL(10, 2))
     win_amount: Mapped[Decimal] = mapped_column(DECIMAL(10, 2), default=0)
     game_finished: Mapped[bool] = mapped_column(default=False)
@@ -21,5 +21,4 @@ class BetModel(Base):
     )
     game: Mapped["GameModel"] = relationship(
         back_populates="bet",
-        single_parent=True,
     )
