@@ -12,3 +12,7 @@ class GameModel(Base):
     second_player: Mapped[str]
     first_player_result: Mapped[GameEnum] = mapped_column(default=GameEnum.NOT)
     game_over: Mapped[bool] = mapped_column(default=False)
+    bet: Mapped["BetModel"] = relationship(
+        back_populates="game",
+        uselist=False
+    )
