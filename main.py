@@ -6,6 +6,7 @@ from fastapi import FastAPI
 import app_settings
 from game.routers import router as game_router
 from user.routers import router as user_router
+from bet.routers import router as bet_router
 
 
 @contextlib.asynccontextmanager
@@ -18,3 +19,4 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 app = FastAPI(title="GameAPI", lifespan=lifespan)
 app.include_router(game_router, prefix='/api/game', tags=['Game'])
 app.include_router(user_router, prefix='/api/user', tags=['User'])
+app.include_router(bet_router, prefix='/api/bet', tags=['Bet'])
