@@ -3,6 +3,7 @@ from .config import settings
 from .session_manager import db_manager, get_session
 from game.models import GameModel
 from user.models import UserModel
+from bet.models import BetModel
 
 __all__ = [
     "Base",
@@ -11,4 +12,5 @@ __all__ = [
     "settings",
     "GameModel",
     "UserModel",
+    "BetModel",
 ]
