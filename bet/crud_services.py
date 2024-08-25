@@ -4,7 +4,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.encoders import jsonable_encoder
 
-
 from app_settings import get_session
 from bet.schemas import BetSchema
 from bet.models import BetModel
@@ -54,16 +53,26 @@ async def create_bet_game(
         bet: BetSchema,
         session: AsyncSession = Depends(get_session)
 ):
-    db_game = BetModel(**bet.model_dump())
-    session.add(db_game)
-    try:
-        await session.commit()
-    except IntegrityError:
-        await session.rollback()
+    # Проверяем, существует ли уже ставка для данного пользователя и игры
+    existing_bet = await session.execute(
+        select(BetModel).where(
+            BetModel.user_id == bet.user_id,
+            BetModel.game_id == bet.game_id
+        )
+    )
+    existing_bet = existing_bet.scalars().first()
+
+    if existing_bet:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="A game with game such_id already exists."
+            detail="You have already placed a bet on this game."
         )
+
+    # Если ставки нет, создаем новую
+    db_game = BetModel(**bet.model_dump())
+    session.add(db_game)
+
+    await session.commit()
 
 
 async def get_all_user_games(
