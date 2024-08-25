@@ -11,13 +11,13 @@ from .models import UserModel
 async def create_user(
         user: UserSchema,
         session: AsyncSession = Depends(get_session)
-) -> None:
+):
     db = UserModel(**user.model_dump())
     session.add(db)
     await session.commit()
 
 
-async def get_all_users(session: AsyncSession = Depends(get_session)) -> [UserModel]:
+async def get_all_users(session: AsyncSession = Depends(get_session)):
     result = (await session.execute(select(UserModel))).scalars().all()
     return jsonable_encoder(result)
 
@@ -25,11 +25,12 @@ async def get_all_users(session: AsyncSession = Depends(get_session)) -> [UserMo
 async def update_user_balance(
         balance: UserBalanceSchema,
         session: AsyncSession = Depends(get_session)
-) -> None:
+):
     result = await session.execute(
         update(UserModel).where(UserModel.id == balance.user_id).values(
             balance=UserModel.balance + balance.balance
-        ).execution_options(synchronize_session="fetch")
+        )
     )
     if result.rowcount == 0:
         raise HTTPException(status_code=404, detail="User not found")
+    await session.commit()
